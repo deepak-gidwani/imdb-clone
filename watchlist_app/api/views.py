@@ -13,6 +13,9 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, IsAdminUser
 from watchlist_app.api.permissions import *
 from rest_framework.authentication import BasicAuthentication, TokenAuthentication
+from rest_framework.throttling import UserRateThrottle,AnonRateThrottle
+from .throttling import *
+from rest_framework.throttling import ScopedRateThrottle
 
 
 # Create your views here.
@@ -20,6 +23,7 @@ from rest_framework.authentication import BasicAuthentication, TokenAuthenticati
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticated]
+    throttle_classes = [ReviewCreateThrottle]
     
     def get_queryset(self):
         return Review.objects.all()
@@ -47,7 +51,8 @@ class ReviewCreate(generics.CreateAPIView):
 
 class ReviewList(generics.ListAPIView):
     # queryset = Review.objects.all()
-    # authentication_classes = [TokenAuthentication]
+    authentication_classes = [TokenAuthentication]
+    throttle_classes=[ReviewListThrottle]
     permission_classes = [IsAuthenticated]
     serializer_class  = ReviewSerializer
     
@@ -57,6 +62,8 @@ class ReviewList(generics.ListAPIView):
         return Review.objects.filter(watchlist=pk)
     
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'review-detail'
     permission_classes = [ReviewUserorAdminorReadOnly]
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
