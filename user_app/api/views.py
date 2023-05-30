@@ -2,8 +2,9 @@ from rest_framework.decorators import api_view
 from .serializers import *
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from user_app.models import *
+from user_app.models import *   # used for autogenerating auth token
 from rest_framework import status
+# from rest_framework_simplejwt.tokens import RefreshToken
 
 @api_view(['POST',])
 def registerations_view(request):
@@ -19,6 +20,12 @@ def registerations_view(request):
             data['email'] = account.email
             
             data['token'] = Token.objects.get(user=account).key
+            # refresh = RefreshToken.for_user(account)  jwt ka part
+            
+            # data['token'] = {
+            #     'refresh': str(refresh),
+            #     'access': str(refresh.access_token),
+            # }
             
         else:
             data = serializer.errors    
