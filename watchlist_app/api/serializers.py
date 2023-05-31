@@ -9,8 +9,10 @@ class ReviewSerializer(serializers.ModelSerializer):
         exclude = ('watchlist',)
 
 class WatchListSerializer(serializers.ModelSerializer):
-    reviews = ReviewSerializer(many=True,read_only=True) # read-only mtlb post req m reviews ni create krenge bs get m recieve krenge
-
+    # reviews = ReviewSerializer(many=True,read_only=True) # read-only mtlb post req m reviews ni create krenge bs get m recieve krenge
+    # platform = serializers.StringRelatedField() ye sahi kyu ki model m __str__ name de rha h
+    # or we can use that
+    platform = serializers.CharField(source='platform.name')
     class Meta:
         model = WatchList
         fields = "__all__"

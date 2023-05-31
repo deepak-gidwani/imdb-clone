@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -145,13 +146,14 @@ REST_FRAMEWORK = {
     #     'rest_framework.throttling.AnonRateThrottle',
     #     'rest_framework.throttling.UserRateThrottle'
     # ],
-    'DEFAULT_THROTTLE_RATES': {
-        'anon': '2/day',
-        'user': '3/day',
-        'review-create':'5/day',
-        'review-list':'6/day', 
-        'review-detail':'7/day',
-    }
+    # 'DEFAULT_THROTTLE_RATES': {
+    #     'anon': '2/day',
+    #     'user': '3/day',
+    #     'review-create':'5/day',
+    #     'review-list':'6/day', 
+    #     'review-detail':'7/day',
+    # },
+    # 'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 # SIMPLE_JWT ={

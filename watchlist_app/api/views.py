@@ -16,6 +16,10 @@ from rest_framework.authentication import BasicAuthentication, TokenAuthenticati
 from rest_framework.throttling import UserRateThrottle,AnonRateThrottle
 from .throttling import *
 from rest_framework.throttling import ScopedRateThrottle
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+
+
 
 
 # Create your views here.
@@ -52,9 +56,11 @@ class ReviewCreate(generics.CreateAPIView):
 class ReviewList(generics.ListAPIView):
     # queryset = Review.objects.all()
     authentication_classes = [TokenAuthentication]
-    throttle_classes=[ReviewListThrottle]
+    # throttle_classes=[ReviewListThrottle]
     permission_classes = [IsAuthenticated]
     serializer_class  = ReviewSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['review_user__username', 'active']
     
     def get_queryset(self):
         pk = self.kwargs['pk']
@@ -142,6 +148,12 @@ class StreamPlatformVS(viewsets.ModelViewSet):
 #         serializer = StreamPlatformSerializer(platform)
 #         return Response(serializer.data)
 
+class WatchListGV(generics.ListAPIView):
+    queryset = WatchList.objects.all()
+    serializer_class = WatchListSerializer
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['avg_rating']
+    
 
 class WatchListAV(APIView):
     permission_classes = [AdminOrReadOnly]
