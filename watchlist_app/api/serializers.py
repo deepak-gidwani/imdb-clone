@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from watchlist_app.models import *
+from rest_framework.exceptions import ValidationError
 
 class ReviewSerializer(serializers.ModelSerializer):
     review_user = serializers.StringRelatedField(read_only=True)
@@ -10,16 +11,24 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 class WatchListSerializer(serializers.ModelSerializer):
     # reviews = ReviewSerializer(many=True,read_only=True) # read-only mtlb post req m reviews ni create krenge bs get m recieve krenge
-    # platform = serializers.StringRelatedField() ye sahi kyu ki model m __str__ name de rha h
+    # platform = serializers.StringRelatedField() #ye sahi kyu ki model m __str__ name de rha h
     # or we can use that
     platform = serializers.CharField(source='platform.name')
     class Meta:
         model = WatchList
         fields = "__all__"
+        # exclude = ('avg_rating','number_rating')
         extra_kwargs = {
             "avg_rating":{"read_only": True},
             "number_rating":{"read_only": True}
         }
+    # def create(self, validated_data):
+    #     # print(validated_data)
+    #     platform = validated_data['platform']
+    #     chk = StreamPlatform.objects.get(name=platform)
+    #     watch = WatchList.objects.create(**validated_data,platform=chk)
+    #     raise watch
+        
 
 
 # class StreamPlatformSerializer(serializers.ModelSerializer): modelserializer

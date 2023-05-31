@@ -18,7 +18,7 @@ from .throttling import *
 from rest_framework.throttling import ScopedRateThrottle
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-
+from .pagination import *
 
 
 
@@ -26,8 +26,8 @@ from rest_framework import filters
 
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticated]
-    throttle_classes = [ReviewCreateThrottle]
+    # permission_classes = [IsAuthenticated]
+    # throttle_classes = [ReviewCreateThrottle]
     
     def get_queryset(self):
         return Review.objects.all()
@@ -149,14 +149,16 @@ class StreamPlatformVS(viewsets.ModelViewSet):
 #         return Response(serializer.data)
 
 class WatchListGV(generics.ListAPIView):
+    pagination_class = WatchListCPagination 
     queryset = WatchList.objects.all()
     serializer_class = WatchListSerializer
-    filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['avg_rating']
+    # filter_backends = [filters.OrderingFilter]
+    # ordering_fields = ['avg_rating']
     
 
 class WatchListAV(APIView):
-    permission_classes = [AdminOrReadOnly]
+    # permission_classes = [AdminOrReadOnly]
+    pagination_class = WatchListPagination
     def get(self, request):
         movies = WatchList.objects.all()
         serializer = WatchListSerializer(movies, many=True)
