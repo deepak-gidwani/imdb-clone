@@ -6,4 +6,4 @@ class ReviewCreateThrottle(UserRateThrottle):
 class ReviewListThrottle(UserRateThrottle):
     scope = 'review-list'
     
-#agr throttling ki alag se file ni bnani to scope throttling use kro .
+#agr throttling ki alag se file ni bnani to scope throttling use kro ..
